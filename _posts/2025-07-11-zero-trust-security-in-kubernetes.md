@@ -19,7 +19,91 @@ For Kubernetes environments, this translates to three core pillars:
 Let me walk you through how we implemented each pillar in production.
 
 ---
+## Diagram 1: Zero-Trust Architecture Overview
 
+```mermaid
+graph TB
+    subgraph External["External Access Layer"]
+        Engineer[👨‍💻 Engineer]
+        SSO[Okta SSO]
+        MFA[2FA/MFA Device]
+    end
+    
+    subgraph Teleport["Identity & Access Layer - Teleport"]
+        TeleportProxy[Teleport Proxy<br/>Certificate Authority]
+        AuditLog[Audit Log Storage<br/>EFK Stack]
+        TeleportProxy --> AuditLog
+    end
+    
+    subgraph AdmissionControl["Admission Control Layer - OPA"]
+        Webhook[OPA Gatekeeper<br/>Admission Webhook]
+        Policies[Policy Library<br/>Non-root containers<br/>Resource limits<br/>Image tags<br/>Security contexts]
+        Webhook --> Policies
+    end
+    
+    subgraph K8sCluster["Kubernetes Cluster"]
+        APIServer[Kube API Server]
+        
+        subgraph Production["Production Namespace"]
+            DefaultDeny[Default Deny<br/>Network Policy]
+            
+            subgraph Frontend["Frontend Zone"]
+                FrontendPod[Frontend Pod<br/>Non-privileged]
+            end
+            
+            subgraph Backend["Backend Zone"]
+                APIPod[API Pod<br/>Non-privileged]
+            end
+            
+            subgraph Data["Data Zone"]
+                DBPod[Database Pod<br/>Non-privileged]
+            end
+            
+            DefaultDeny -.enforces.-> FrontendPod
+            DefaultDeny -.enforces.-> APIPod
+            DefaultDeny -.enforces.-> DBPod
+        end
+    end
+    
+    subgraph NetworkPolicies["Network Policy Enforcement"]
+        AllowFE[Allow Policy<br/>Frontend to API]
+        AllowBE[Allow Policy<br/>API to Database]
+        BlockLateral[Block<br/>Frontend to Database]
+    end
+    
+    Engineer -->|1. Login with SSO| SSO
+    SSO -->|2. Authenticate| TeleportProxy
+    Engineer -->|3. Provide 2FA| MFA
+    MFA -->|4. Verify| TeleportProxy
+    TeleportProxy -->|5. Issue Certificate| Engineer
+    
+    Engineer -->|6. kubectl apply| Webhook
+    Webhook -->|7. Validate policies| Policies
+    Webhook -->|8. Approved/Rejected| APIServer
+    
+    Engineer -->|9. kubectl commands| TeleportProxy
+    TeleportProxy -->|10. Proxied access| APIServer
+    
+    APIServer --> Production
+    
+    FrontendPod -->|Allowed| APIPod
+    APIPod -->|Allowed| DBPod
+    FrontendPod -.->|Blocked| DBPod
+    
+    AllowFE -.enforces.-> FrontendPod
+    AllowBE -.enforces.-> APIPod
+    BlockLateral -.blocks.-> FrontendPod
+    
+    style Engineer fill:#e1f5ff
+    style TeleportProxy fill:#ff9999
+    style Webhook fill:#ffcc99
+    style DefaultDeny fill:#ffcccc
+    style AllowFE fill:#ccffcc
+    style AllowBE fill:#ccffcc
+    style BlockLateral fill:#ffcccc
+    style AuditLog fill:#ffffcc
+```
+---
 ## Pillar 1: Identity-Based Infrastructure Access with Teleport
 
 ### The Problem We Faced
@@ -417,33 +501,31 @@ Here's how Teleport, Network Policies, and OPA work together:
 
 ### Architecture Diagram
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Identity Layer                        │
-│                      (Teleport)                          │
-│  • SSO Integration  • 2FA/MFA  • Audit Logging         │
-└────────────────┬────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────┐
-│                  Admission Control                       │
-│                       (OPA)                              │
-│  • Policy Validation  • Compliance Checks               │
-└────────────────┬────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────┐
-│                 Kubernetes Cluster                       │
-│                                                          │
-│  ┌──────────┐     Network        ┌──────────┐          │
-│  │   Pod A  │ ────Policy────✗────│  Pod B   │          │
-│  │          │                     │          │          │
-│  │  (API)   │ ────Policy────✓────│ (Cache)  │          │
-│  └──────────┘                     └──────────┘          │
-│                                                          │
-│         Runtime Network Isolation Layer                 │
-└─────────────────────────────────────────────────────────┘
-```
+The following diagram shows how all three components work together to create a comprehensive zero-trust security model:
+
+![Zero-Trust Architecture Overview - See the full interactive diagram in the Mermaid chart]
+
+**Key Flow:**
+1. Engineer authenticates via Teleport (SSO + 2FA)
+2. Receives short-lived certificate (8-hour expiry)
+3. Submits deployment manifest
+4. OPA validates against security policies
+5. If approved, pods are created with network isolation
+6. Network Policies enforce communication rules at runtime
+7. All actions are logged to audit trail
+
+### Deployment Flow: From Code to Production
+
+Here's what happens step-by-step when deploying with our zero-trust stack:
+
+![Zero-Trust Deployment Flow - See the full interactive diagram in the Mermaid chart]
+
+Notice how there are multiple checkpoints where insecure configurations get caught:
+- **Pre-deployment**: CI/CD policy checks with conftest
+- **Admission time**: OPA Gatekeeper validates before creation
+- **Runtime**: Network Policies enforce communication boundaries
+
+This defense-in-depth approach means security isn't a single point of failure—it's layered throughout the entire deployment lifecycle.
 
 ---
 
@@ -544,3 +626,5 @@ If you're starting your zero-trust journey, focus on one pillar at a time. Get T
 **Questions? Comments?** Drop them below or reach out on LinkedIn. I'd love to hear about your zero-trust journey!
 
 ---
+
+*Originally published on [Dev.to / Medium] on [Date]*
