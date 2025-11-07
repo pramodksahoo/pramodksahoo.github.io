@@ -34,6 +34,53 @@ body {
 }
 
 /* ============================================
+   Mermaid Diagram Styling
+   ============================================ */
+.mermaid {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 32px 0;
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Responsive diagram sizing */
+@media (max-width: 768px) {
+  .mermaid {
+    padding: 16px;
+    margin: 24px -16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* Improve diagram text readability */
+.mermaid text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+}
+
+/* Pre tags containing mermaid code (backup styling) */
+pre.mermaid {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  overflow-x: auto;
+}
+
+
+/* ============================================
    Hero Section
    ============================================ */
 .hero-section {
