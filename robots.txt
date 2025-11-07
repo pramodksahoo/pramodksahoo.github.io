@@ -1,0 +1,16 @@
+# Robots.txt for pramodksahoo.github.io
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://pramodksahoo.github.io/sitemap.xml
+
+# Disallow crawling of specific directories (if needed)
+# Disallow: /assets/
+# Disallow: /css/
+# Disallow: /js/
+
+# Crawl delay (optional - use if you want to be nice to crawlers)
+# Crawl-delay: 1
