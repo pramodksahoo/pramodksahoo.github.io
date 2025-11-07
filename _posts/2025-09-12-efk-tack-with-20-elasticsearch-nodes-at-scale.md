@@ -1,3 +1,17 @@
+---
+layout: post
+title: "Building Observable Systems: EFK Stack with 20+ Elasticsearch Nodes at Scale"
+date: 2025-09-12
+last_modified_at: 2025-11-07
+categories: [Observability, Elasticsearch, DevOps]
+tags: [elasticsearch, efk-stack, fluent-bit, kibana, observability, logging, kubernetes, production, scale, monitoring, elk, devops, cloudops, infrastructure]
+author: Pramoda Sahoo
+excerpt: "From log chaos to real-time observability - Complete guide to building and scaling an EFK stack with 20+ Elasticsearch nodes processing millions of log events per day across 10+ engineering teams."
+image: /assets/images/efk-stack-architecture.png
+keywords: "EFK Stack, Elasticsearch at Scale, Fluent Bit, Kibana, Kubernetes Logging, Observability, Production Logging, Elasticsearch Cluster, ECK Operator, Log Management"
+toc: true
+---
+
 # Building Observable Systems: EFK Stack with 20+ Elasticsearch Nodes at Scale
 
 ## From Log Chaos to Real-Time Observability - A Production Journey
