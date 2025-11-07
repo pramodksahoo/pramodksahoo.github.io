@@ -1,0 +1,137 @@
+---
+layout: default
+---
+<link href="/css/override.css" rel="stylesheet" type="text/css">
+
+<div class="home">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg class="hero-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>DevOps & CloudOps</span>
+      </div>
+      <h1 class="hero-title">{{ site.title }}</h1>
+      <p class="hero-subtitle">{{ site.description }}</p>
+      <p class="hero-author">by <strong>{{ site.author }}</strong></p>
+      
+      <div class="hero-social">
+        {%- if site.github_username -%}
+        <a href="https://github.com/{{ site.github_username }}" class="social-link" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+          </svg>
+          GitHub
+        </a>
+        {%- endif -%}
+        {%- if site.linkedin_username -%}
+        <a href="https://linkedin.com/in/{{ site.linkedin_username }}" class="social-link" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+          </svg>
+          LinkedIn
+        </a>
+        {%- endif -%}
+        {%- if site.twitter_username -%}
+        <a href="https://twitter.com/{{ site.twitter_username }}" class="social-link" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M22.46 6c-.85.38-1.78.64-2.75.76a4.8 4.8 0 0 0 2.1-2.66c-.92.55-1.95.95-3.03 1.16a4.76 4.76 0 0 0-8.1 4.34A13.5 13.5 0 0 1 3.02 4.7a4.76 4.76 0 0 0 1.47 6.36c-.77-.02-1.5-.24-2.13-.59v.06a4.76 4.76 0 0 0 3.82 4.67a4.7 4.7 0 0 1-2.15.08a4.76 4.76 0 0 0 4.45 3.3A9.55 9.55 0 0 1 2 19.54a13.5 13.5 0 0 0 7.29 2.14c8.75 0 13.53-7.25 13.53-13.53v-.62A9.64 9.64 0 0 0 22.46 6z"/>
+          </svg>
+          Twitter
+        </a>
+        {%- endif -%}
+      </div>
+    </div>
+    
+    <div class="hero-decoration">
+      <div class="floating-element element-1"></div>
+      <div class="floating-element element-2"></div>
+      <div class="floating-element element-3"></div>
+    </div>
+  </section>
+
+  <!-- Featured Posts Section -->
+  <section class="featured-posts">
+    <div class="section-header">
+      <h2 class="section-title">Latest Articles</h2>
+      <p class="section-subtitle">Deep dives into DevOps, CloudOps, and Infrastructure Automation</p>
+    </div>
+
+    {%- if site.posts.size > 0 -%}
+    <div class="post-grid">
+      {%- for post in site.posts limit:6 -%}
+      <article class="post-card">
+        <div class="post-card-header">
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: date_format }}
+          </time>
+          {%- if post.categories.size > 0 -%}
+          <span class="post-category">{{ post.categories | first }}</span>
+          {%- endif -%}
+        </div>
+        
+        <h3 class="post-card-title">
+          <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h3>
+        
+        {%- if post.excerpt -%}
+        <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+        {%- endif -%}
+        
+        <div class="post-card-footer">
+          <a href="{{ post.url | relative_url }}" class="read-more">
+            Read Article
+            <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+            </svg>
+          </a>
+          {%- if post.tags -%}
+          <div class="post-tags">
+            {%- for tag in post.tags limit:2 -%}
+            <span class="tag">{{ tag }}</span>
+            {%- endfor -%}
+          </div>
+          {%- endif -%}
+        </div>
+      </article>
+      {%- endfor -%}
+    </div>
+
+    <div class="view-all-container">
+      <a href="{{ '/archive' | relative_url }}" class="view-all-link">
+        View All Articles
+        <svg class="arrow-icon" viewBox="0 0 24 24" width="18" height="18">
+          <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+        </svg>
+      </a>
+    </div>
+    {%- else -%}
+    <p class="no-posts">No posts available yet. Stay tuned!</p>
+    {%- endif -%}
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="about-content">
+      <h2 class="about-title">About This Blog</h2>
+      <p class="about-text">
+        This blog explores modern DevOps practices, CloudOps strategies, and Infrastructure Automation 
+        through real-world engineering experiences. I share practical insights, detailed tutorials, and 
+        lessons learned from building and scaling production systems.
+      </p>
+      <div class="about-topics">
+        <span class="topic-tag">Kubernetes</span>
+        <span class="topic-tag">CI/CD</span>
+        <span class="topic-tag">Infrastructure as Code</span>
+        <span class="topic-tag">Security</span>
+        <span class="topic-tag">Observability</span>
+        <span class="topic-tag">Cloud Architecture</span>
+      </div>
+    </div>
+  </section>
+</div>
