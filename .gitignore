@@ -1,4 +1,5 @@
 # Build and Release Folders
+﻿_site
 bin-debug/
 bin-release/
 [Oo]bj/
