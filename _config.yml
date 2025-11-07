@@ -19,7 +19,7 @@ linkedin_username: "pramoda-sahoo"
 ######### Nothing below needs to be changed (unless you know what you're doing) #########
 #########################################################################################
 theme: "minima"
-
+url: "https://pramodksahoo.github.io"
 rss: rss
 
 kramdown:
