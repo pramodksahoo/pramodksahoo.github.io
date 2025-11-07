@@ -104,6 +104,103 @@ graph TB
     style AuditLog fill:#ffffcc
 ```
 ---
+
+## Diagram 2: Zero-Trust Deployment Flow (Step-by-Step)
+
+This sequence diagram shows what happens from code commit to production deployment.
+
+```mermaid
+sequenceDiagram
+    participant Dev as 👨‍💻 Developer
+    participant Git as Git Repository
+    participant CI as CI/CD Pipeline
+    participant Teleport as Teleport Proxy
+    participant OPA as OPA Gatekeeper
+    participant API as Kubernetes API
+    participant NP as Network Policy<br/>Controller
+    participant Pod as Application Pod
+    participant Audit as Audit Log
+    
+    Note over Dev,Audit: Deployment with Zero-Trust Validation
+    
+    rect rgb(230, 240, 255)
+        Note over Dev,Git: Phase 1: Code & Configuration
+        Dev->>Git: Push deployment manifest
+        Git->>CI: Trigger pipeline
+    end
+    
+    rect rgb(255, 240, 230)
+        Note over CI,OPA: Phase 2: Policy Pre-Validation
+        CI->>CI: Run conftest<br/>(OPA policy check)
+        alt Policy Violations Found
+            CI-->>Dev: ❌ Build Failed<br/>Policy violations detected
+            Note over Dev: Fix: Add security context,<br/>resource limits, etc.
+        else Policies Pass
+            CI->>CI: ✅ Continue deployment
+        end
+    end
+    
+    rect rgb(230, 255, 240)
+        Note over Dev,Teleport: Phase 3: Authentication
+        Dev->>Teleport: tsh login
+        Teleport->>Dev: Request SSO + 2FA
+        Dev->>Teleport: Provide credentials + MFA
+        Teleport->>Audit: Log authentication attempt
+        Teleport->>Dev: Issue short-lived certificate<br/>(8 hour expiry)
+    end
+    
+    rect rgb(255, 255, 230)
+        Note over Dev,API: Phase 4: Deployment Submission
+        Dev->>Teleport: kubectl apply -f deployment.yaml
+        Teleport->>Audit: Log command execution
+        Teleport->>API: Forward request<br/>(with certificate)
+        API->>API: Verify certificate validity
+    end
+    
+    rect rgb(255, 230, 230)
+        Note over API,OPA: Phase 5: Admission Control
+        API->>OPA: Webhook: Validate resource
+        OPA->>OPA: Check against policies:<br/>• Non-root user?<br/>• Resource limits set?<br/>• No 'latest' tag?<br/>• Security context defined?
+        
+        alt Policy Violation
+            OPA-->>API: ❌ Admission Denied<br/>Detailed error message
+            API-->>Dev: Deployment rejected with fix
+        else All Policies Pass
+            OPA->>API: ✅ Admission Approved
+        end
+    end
+    
+    rect rgb(240, 230, 255)
+        Note over API,Pod: Phase 6: Pod Creation & Network Isolation
+        API->>Pod: Create Pod
+        Pod->>NP: Register with network policies
+        NP->>NP: Apply default deny-all
+        NP->>NP: Apply explicit allow rules
+        Pod->>Pod: Start container<br/>(non-root, with limits)
+    end
+    
+    rect rgb(230, 255, 255)
+        Note over Pod,Audit: Phase 7: Runtime & Monitoring
+        Pod->>Pod: Application running
+        
+        alt Allowed Network Communication
+            Pod->>Pod: Communication to<br/>allowed services ✅
+        else Blocked Network Communication
+            Pod--xPod: Communication blocked<br/>by network policy ❌
+            NP->>Audit: Log policy violation
+        end
+        
+        Note over Dev,Audit: All actions logged for compliance
+        Teleport->>Audit: Access logs
+        OPA->>Audit: Policy decisions
+        NP->>Audit: Network events
+    end
+    
+    Note over Dev,Audit: Zero-Trust = Every layer validated, nothing trusted by default
+```
+
+---
+
 ## Pillar 1: Identity-Based Infrastructure Access with Teleport
 
 ### The Problem We Faced
@@ -621,10 +718,8 @@ If you're starting your zero-trust journey, focus on one pillar at a time. Get T
 
 ---
 
-**About the Author:** I'm a Senior DevOps and Cloud Engineer with 10+ years of experience leading infrastructure automation and security for fast-paced engineering teams. Currently implementing zero-trust architectures for multi-region Kubernetes clusters serving 10+ engineering teams. Find me on [LinkedIn](https://linkedin.com/in/pramoda-sahoo) or [GitHub](https://github.com).
+**About the Author:** I'm a Senior DevOps and Cloud Engineer with 11+ years of experience leading infrastructure automation and security for fast-paced engineering teams. Currently implementing zero-trust architectures for multi-region Kubernetes clusters serving 10+ engineering teams. Find me on [LinkedIn](https://linkedin.com/in/pramoda-sahoo) or [GitHub](https://github.com/pramodksahoo).
 
 **Questions? Comments?** Drop them below or reach out on LinkedIn. I'd love to hear about your zero-trust journey!
 
 ---
-
-*Originally published on [Dev.to / Medium] on [Date]*
