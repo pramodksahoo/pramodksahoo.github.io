@@ -39,10 +39,11 @@
   <!-- end highlight.js support -->
   
   <!-- Begin Mermaid.js support for diagrams -->
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    // Initialize Mermaid with custom theme
     mermaid.initialize({ 
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'default',
       securityLevel: 'loose',
       themeVariables: {
@@ -55,6 +56,26 @@
         fontSize: '16px',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       }
+    });
+
+    // Convert code blocks to mermaid divs and render
+    document.addEventListener('DOMContentLoaded', function() {
+      // Find all code blocks with language-mermaid class
+      const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+      
+      mermaidBlocks.forEach((block, index) => {
+        // Create a new div for mermaid
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.classList.add('mermaid');
+        mermaidDiv.textContent = block.textContent;
+        
+        // Replace the pre>code block with the mermaid div
+        const pre = block.parentElement;
+        pre.parentNode.replaceChild(mermaidDiv, pre);
+      });
+      
+      // Now render all mermaid diagrams
+      mermaid.run();
     });
   </script>
   <!-- end Mermaid.js support -->
