@@ -1,3 +1,17 @@
+---
+layout: post
+title: "Zero-Trust Security in Kubernetes: Implementing Teleport, Network Policies, and OPA"
+date: 2025-07-11
+last_modified_at: 2025-11-07
+categories: [Kubernetes, Security, DevOps]
+tags: [kubernetes, security, zero-trust, teleport, network-policies, opa, open-policy-agent, devops, cloudops, k8s-security, production, multi-region]
+author: Pramoda Sahoo
+excerpt: "Learn how we built a production-grade zero-trust security architecture for Kubernetes clusters serving 10+ engineering teams. Complete guide to implementing Teleport, Network Policies, and OPA for identity-based access control."
+image: /assets/images/zero-trust-kubernetes.png
+keywords: "Zero Trust Kubernetes, Kubernetes Security, Teleport Kubernetes, OPA Gatekeeper, Network Policies, Kubernetes RBAC, Production Security, Multi-region Kubernetes"
+toc: true
+---
+
 # Zero-Trust Security in Kubernetes: Implementing Teleport, Network Policies, and OPA
 
 ## How We Built a Production-Grade Zero-Trust Architecture for 10+ Engineering Teams
