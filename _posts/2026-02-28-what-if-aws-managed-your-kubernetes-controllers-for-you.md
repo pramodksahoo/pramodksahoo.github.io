@@ -278,7 +278,7 @@ graph TB
 
 Here's how everything fits together in our production environment:
 
-![eks-capabilities-architecture](/assets/images/posts/eks-capabilities-architecture.png)
+![eks-capabilities-architecture](eks-capabilities-architecture.png)
 
 ```mermaid
 graph TB
